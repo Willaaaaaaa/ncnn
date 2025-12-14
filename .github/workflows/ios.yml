@@ -1,7 +1,8 @@
 name: ios
 on:
+  workflow_dispatch:
   push:
-    branches: [master]
+    branches: [master, test]
     paths:
     - '.github/workflows/ios.yml'
     - 'toolchains/ios.toolchain.cmake'
@@ -152,16 +153,16 @@ jobs:
         mkdir build-arm64 && cd build-arm64
         cmake ${{ env.NCNN_CMAKE_OPTIONS }} -DPLATFORM=OS64 -DARCHS="arm64" \
             -DVulkan_LIBRARY=$GITHUB_WORKSPACE/MoltenVK/MoltenVK/static/MoltenVK.xcframework/ios-arm64/libMoltenVK.a ..
-        cmake --build . -j 4
+        cmake --build . -j 4 --verbose
     - name: simulator-x86_64
       run: |
         mkdir build-simulator-x86_64 && cd build-simulator-x86_64
         cmake ${{ env.NCNN_CMAKE_OPTIONS }} -DPLATFORM=SIMULATOR64 -DARCHS="x86_64" \
             -DVulkan_LIBRARY=$GITHUB_WORKSPACE/MoltenVK/MoltenVK/static/MoltenVK.xcframework/ios-arm64_x86_64-simulator/libMoltenVK.a ..
-        cmake --build . -j 4
+        cmake --build . -j 4 --verbose
     - name: simulator-arm64
       run: |
         mkdir build-simulator-arm64 && cd build-simulator-arm64
         cmake ${{ env.NCNN_CMAKE_OPTIONS }} -DPLATFORM=SIMULATORARM64 -DARCHS="arm64" \
             -DVulkan_LIBRARY=$GITHUB_WORKSPACE/MoltenVK/MoltenVK/static/MoltenVK.xcframework/ios-arm64_x86_64-simulator/libMoltenVK.a ..
-        cmake --build . -j 4
+        cmake --build . -j 4 --verbose
