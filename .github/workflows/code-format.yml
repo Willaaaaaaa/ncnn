@@ -1,6 +1,7 @@
 name: code-format
 
-on: [push, pull_request]
+# on: [push, pull_request]
+on: [pull_request]
 
 concurrency:
   group: code-format-${{ github.ref }}
