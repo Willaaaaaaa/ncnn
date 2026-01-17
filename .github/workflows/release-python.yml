@@ -1,8 +1,8 @@
 name: release-python
 on:
-  push:
-    tags:
-      - '*'
+  # push:
+  #   tags:
+  #     - '*'
   workflow_dispatch:
 
 env:
