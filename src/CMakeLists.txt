@@ -752,12 +752,7 @@ if(NCNN_INSTALL_SDK)
         COMPATIBILITY AnyNewerVersion
     )
 
-    install(TARGETS ncnn EXPORT ncnn
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    )
-    install(FILES
+    set_target_properties(ncnn PROPERTIES PUBLIC_HEADER
         allocator.h
         benchmark.h
         blob.h
@@ -787,8 +782,23 @@ if(NCNN_INSTALL_SDK)
         ${CMAKE_CURRENT_BINARY_DIR}/layer_shader_type_enum.h
         ${CMAKE_CURRENT_BINARY_DIR}/layer_type_enum.h
         ${CMAKE_CURRENT_BINARY_DIR}/platform.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ncnn
     )
+
+    if(APPLE AND NCNN_BUILD_FRAMEWORK)
+        set_target_properties(ncnn PROPERTIES
+            FRAMEWORK TRUE
+            MACOSX_FRAMEWORK_IDENTIFIER "com.tencent.ncnn"
+        )
+    endif()
+
+    install(TARGETS ncnn EXPORT ncnn
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ncnn
+    )
+
     install(EXPORT ncnn DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ncnn)
     configure_file(${CMAKE_CURRENT_LIST_DIR}/../cmake/ncnnConfig.cmake.in ncnnConfig.cmake @ONLY)
     install(FILES

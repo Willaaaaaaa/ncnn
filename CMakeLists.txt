@@ -108,6 +108,10 @@ else()
     option(NCNN_BUILD_EXAMPLES "build examples" ON)
 endif()
 
+if(APPLE)
+    option(NCNN_BUILD_FRAMEWORK "build framework for apple" OFF)
+endif()
+
 if(NCNN_SHARED_LIB)
     if(NCNN_ENABLE_LTO)
         # enable global link time optimization
