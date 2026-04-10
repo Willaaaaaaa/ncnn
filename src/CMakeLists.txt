@@ -806,7 +806,7 @@ if(NCNN_INSTALL_SDK)
     )
 
     if(APPLE AND NCNN_BUILD_FRAMEWORK)
-        set(NCNN_CMAKE_INSTALL_DIR Resources/CMake)
+        set(NCNN_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/ncnn.framework/Resources/CMake")
     else()
         set(NCNN_CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/ncnn)
     endif()
