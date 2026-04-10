@@ -789,6 +789,12 @@ if(NCNN_INSTALL_SDK)
             FRAMEWORK TRUE
             MACOSX_FRAMEWORK_IDENTIFIER "com.tencent.ncnn"
         )
+        if(NCNN_OPENMP)
+            target_link_libraries(ncnn INTERFACE "-framework openmp")
+        endif()
+        if(NCNN_VULKAN AND NOT NCNN_SHARED_LIB AND NOT NCNN_SYSTEM_GLSLANG)
+            target_link_libraries(ncnn INTERFACE "-framework glslang")
+        endif()
     endif()
 
     install(TARGETS ncnn EXPORT ncnn
@@ -799,12 +805,18 @@ if(NCNN_INSTALL_SDK)
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ncnn
     )
 
-    install(EXPORT ncnn DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ncnn)
+    if(APPLE AND NCNN_BUILD_FRAMEWORK)
+        set(NCNN_CMAKE_INSTALL_DIR Resources/CMake)
+    else()
+        set(NCNN_CMAKE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/cmake/ncnn)
+    endif()
+
+    install(EXPORT ncnn DESTINATION ${NCNN_CMAKE_INSTALL_DIR})
     configure_file(${CMAKE_CURRENT_LIST_DIR}/../cmake/ncnnConfig.cmake.in ncnnConfig.cmake @ONLY)
     install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/ncnnConfig.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/ncnnConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ncnn)
+        DESTINATION ${NCNN_CMAKE_INSTALL_DIR})
     # pkgconfig
     configure_file(ncnn.pc.in ${CMAKE_CURRENT_BINARY_DIR}/ncnn.pc @ONLY)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ncnn.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
